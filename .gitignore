@@ -1,1 +1,4 @@
-/models/facenet/20170512-110547
+/models
+/.history
+/venv
+/__pycache__
