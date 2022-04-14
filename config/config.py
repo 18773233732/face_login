@@ -1,3 +1,4 @@
+
 database_config = {
     'user': 'root',
     'password': 'root',

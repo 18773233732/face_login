@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from ctypes import util
 import cv2
 from flask_cors import CORS
 from flask_httpauth import HTTPTokenAuth
@@ -13,6 +14,7 @@ import src.facenet
 import tensorflow as tf
 import src.align.detect_face
 import utils.utils
+
 
 app = Flask(__name__)
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -62,7 +64,7 @@ with tf.Graph().as_default():
 
     # 获取post中的图片并执行插入到库 返回数据库中保存的id
     @app.route('/api/register', methods=['POST'])
-    @auth.login_required
+    # @auth.login_required
     def face_insert():
         # 获取post请求中的username作为图片信息
         uid = face_mysql.get_users_length() + 1
@@ -118,6 +120,16 @@ with tf.Graph().as_default():
         request_result['data']['id'] = uid
         # print(request_result)
         return utils.utils.response_json(request_result, 200)
+
+    @app.route('/api/getDeviceInfo', methods=['GET'])
+    @auth.login_required
+    def get_device_info():
+        result = {
+            'success': True,
+            'errorMessage': '',
+            'data': utils.utils.result,
+        }
+        return utils.utils.response_json(result, 200)
 
     @app.route('/api/queryface', methods=['POST'])
     @auth.login_required
@@ -264,4 +276,4 @@ def getTestData():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8081, debug=True)
